@@ -5,6 +5,11 @@
 
 ## Releases
 
+### v0.24.0 - Tech Preview (11/8/2018)
+
+* Add new API for extracting volume capacity usage details. 
+
+  
 ### v0.23.0 - Tech Preview (11/2/2018)
 
 * Cloud migrate status and cloud backup status now report

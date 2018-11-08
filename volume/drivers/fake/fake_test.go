@@ -121,6 +121,25 @@ func TestFakeInspect(t *testing.T) {
 	assert.Nil(t, v)
 }
 
+func TestFakeCapacityUsage(t *testing.T) {
+	d, err := newFakeDriver(map[string]string{})
+	assert.NoError(t, err)
+	vid, err := d.Create(&api.VolumeLocator{
+		Name: "myvol",
+	}, &api.Source{}, &api.VolumeSpec{
+		Size:    87654321,
+		HaLevel: 1,
+	})
+	assert.NoError(t, err)
+	assert.NotEmpty(t, vid)
+
+	v, err := d.CapacityUsage(vid)
+	assert.NoError(t, err)
+	assert.NotNil(t, v)
+	assert.Equal(t, uint64(653421), v.TotalBytes)
+	assert.Equal(t, false, v.IsSnap)
+}
+
 func TestFakeCloudBackupCreate(t *testing.T) {
 	d, err := Init(map[string]string{})
 	assert.NoError(t, err)

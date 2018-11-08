@@ -353,6 +353,27 @@ func (s *VolumeServer) Stats(
 	}, nil
 }
 
+func (s *VolumeServer) CapacityUsage(
+	ctx context.Context,
+	req *api.SdkVolumeCapacityUsageRequest,
+) (*api.SdkVolumeCapacityUsageResponse, error) {
+
+	if len(req.GetVolumeId()) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "Must supply volume id")
+	}
+
+	CapacityUsage, err := s.driver().CapacityUsage(req.GetVolumeId())
+	if err != nil {
+		return nil, status.Errorf(
+			codes.Internal,
+			"Failed to obtain stats for volume %s: %v",
+			req.GetVolumeId(),
+			err.Error())
+	}
+
+	return &api.SdkVolumeCapacityUsageResponse{CapacityUsageInfo: CapacityUsage}, nil
+}
+
 func (s *VolumeServer) mergeVolumeSpecs(vol *api.VolumeSpec, req *api.VolumeSpecUpdate) *api.VolumeSpec {
 
 	spec := &api.VolumeSpec{}

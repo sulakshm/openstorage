@@ -354,6 +354,28 @@ func (d *driver) Stats(volumeID string, cumulative bool) (*api.Stats, error) {
 	}, nil
 }
 
+func (d *driver) CapacityUsage(
+	volumeID string,
+) (*api.CapacityUsageInfo, error) {
+	vols, err := d.Inspect([]string{volumeID})
+	if err == kvdb.ErrNotFound {
+		return nil, fmt.Errorf("Volume not found")
+	} else if err != nil {
+		return nil, err
+	} else if len(vols) == 0 {
+		return nil, fmt.Errorf("Volume not found")
+	}
+
+	return &api.CapacityUsageInfo{
+		ExclusiveBytes: uint64(123456),
+		SharedBytes:    uint64(654321),
+		TotalBytes:     uint64(653421),
+		ErrorDetails:   "",
+		IsSnap:         false,
+	}, nil
+
+}
+
 func (d *driver) CredsCreate(
 	params map[string]string,
 ) (string, error) {

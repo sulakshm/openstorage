@@ -167,6 +167,35 @@
       "title": "- ATTACH_STATE_EXTERNAL: Attached and available externally\n - ATTACH_STATE_INTERNAL: Attached but only available internally\n - ATTACH_STATE_INTERNAL_SWITCH: Switching from External to Internal",
       "type": "string"
     },
+    "apiCapacityUsageInfo": {
+      "properties": {
+        "error_details": {
+          "title": "ErrorString indicates any error encountered for excl/shared\nfields",
+          "type": "string"
+        },
+        "exclusive_bytes": {
+          "format": "uint64",
+          "title": "ExclusiveBytes used by this snap",
+          "type": "string"
+        },
+        "is_snap": {
+          "format": "boolean",
+          "title": "IsSnap is set true for shapshots",
+          "type": "boolean"
+        },
+        "shared_bytes": {
+          "format": "uint64",
+          "title": "SharedBytes used by this snap with other snaps and/or parent",
+          "type": "string"
+        },
+        "total_bytes": {
+          "format": "uint64",
+          "title": "TotalBytes used by this volume",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "apiCloudMigrateCancelRequest": {
       "properties": {
         "task_id": {
@@ -1798,6 +1827,16 @@
       "title": "Defines a response from the node which received the request to attach",
       "type": "object"
     },
+    "apiSdkVolumeCapacityUsageResponse": {
+      "properties": {
+        "capacity_usage_info": {
+          "$ref": "#/definitions/apiCapacityUsageInfo",
+          "title": "CapacityUsage details"
+        }
+      },
+      "title": "Defines response containing volume/snapshot capacity usage details",
+      "type": "object"
+    },
     "apiSdkVolumeCloneRequest": {
       "properties": {
         "name": {
@@ -2921,7 +2960,7 @@
   },
   "info": {
     "title": "OpenStorage SDK",
-    "version": "0.23.0"
+    "version": "0.24.0"
   },
   "paths": {
     "/v1/alerts": {
@@ -4350,6 +4389,31 @@
           }
         },
         "summary": "Stats returns the statistics for the requested volume",
+        "tags": [
+          "OpenStorageVolume"
+        ]
+      }
+    },
+    "/v1/volumes/usage/{volume_id}": {
+      "get": {
+        "operationId": "CapacityUsage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "volume_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/apiSdkVolumeCapacityUsageResponse"
+            }
+          }
+        },
+        "summary": "CapacityUsage returns volume/snapshot's capacity usage details",
         "tags": [
           "OpenStorageVolume"
         ]

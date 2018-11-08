@@ -122,6 +122,9 @@ type StatsDriver interface {
 	UsedSize(volumeID string) (uint64, error)
 	// GetActiveRequests get active requests
 	GetActiveRequests() (*api.ActiveRequests, error)
+	// CapacityUsage returns both exclusive and shared usage
+	// of a snap/volume
+	CapacityUsage(ID string) (*api.CapacityUsageInfo, error)
 }
 
 type QuiesceDriver interface {
